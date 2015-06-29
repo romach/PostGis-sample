@@ -152,6 +152,27 @@ where ST_Contains(ST_MakePolygon(ST_GeomFromText('LINESTRING(30.482056 50.466716
 (2 строки)
 ```
 
+## Geography
+
+```
+CREATE TABLE geo_points ( 
+    id SERIAL PRIMARY KEY,
+    point GEOGRAPHY(POINT,4326),
+    description TEXT   
+  );
+
+INSERT INTO geo_points (point, description) VALUES (ST_GeographyFromText('SRID=4326;POINT(30.420171 50.458585)'), 'Beresteyska' ),
+						   (ST_GeographyFromText('SRID=4326;POINT(30.445495 50.454605)'), 'Shulyavska' ),
+						   (ST_GeographyFromText('SRID=4326;POINT(30.465968 50.450814)'), 'Politechnic Institute' ),
+						   (ST_GeographyFromText('SRID=4326;POINT(30.481944 50.4625)'), 'Lukianivska' );
+
+select id, ST_AsText(point), description from geo_points;
+
+select id, description, ST_AsText(point) as coordinates, ST_Distance(point, ST_GeogFromText('SRID=4326;POINT(30.437051 50.455477)')) as distance
+from geo_points
+where ST_Distance(point, ST_GeogFromText('SRID=4326;POINT(30.437051 50.455477)')) < 1500;
+```
+
 ## Корисні посилання
 * [Introduction to PostGIS][1]
 * Книга **PostGIS in Action**
